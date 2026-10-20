@@ -76,51 +76,45 @@ Vercel provides automatic CI/CD deployment directly from your GitHub repository.
 ---
 
 ### Step 3: Configure Project Settings
-JavaBuddy already contains a pre-configured [vercel.json](file:///c:/Users/USER/OneDrive/Desktop/Java/vercel.json) that automatically handles builds and React Router SPA rewrites.
-
-If configuring manually in the Vercel UI:
-- **Framework Preset**: `Vite`
-- **Root Directory**: Click `Edit` and select `client`
-- **Build Command**: `npm run build`
-- **Output Directory**: `dist`
-- **Install Command**: `npm install`
+JavaBuddy is configured for an **All-in-One Vercel Deployment** ([vercel.json](file:///c:/Users/USER/OneDrive/Desktop/Java/vercel.json)):
+- Both the React frontend (`client`) and the backend API ([api/index.ts](file:///c:/Users/USER/OneDrive/Desktop/Java/api/index.ts)) deploy automatically under the exact same Vercel URL!
+- **Root Directory**: Leave as `./` (Project Root)
+- **Build Command**: `npm --prefix client run build`
+- **Output Directory**: `client/dist`
+- **Framework Preset**: `Vite` (or `Other`)
 
 ---
 
 ### Step 4: Add Environment Variables (Optional)
 In the **Environment Variables** section on Vercel:
-- If you deploy your backend API (see Part 3 below), add:
-  - `VITE_API_URL` = `https://your-backend.onrender.com`
-- If you use Supabase cloud sync:
+- **Java Execution Provider**:
+  - `JAVA_EXECUTION_PROVIDER` = `judge0_rapidapi` (or `unconfigured`)
+  - `RAPIDAPI_KEY` = `your_rapidapi_key` *(optional, for live cloud Java execution)*
+  - `RAPIDAPI_HOST` = `judge0-ce.p.rapidapi.com`
+- **AI Kindergarten Tutor**:
+  - `AI_PROVIDER` = `gemini` *(optional; built-in kindergarten tutor works offline without this)*
+  - `GEMINI_API_KEY` = `your_gemini_api_key`
+- **Supabase Cloud Sync** *(optional; guest mode works without this)*:
   - `VITE_SUPABASE_URL` = `https://your-project.supabase.co`
   - `VITE_SUPABASE_ANON_KEY` = `your_anon_key`
 
-*(If you don't add any environment variables, JavaBuddy automatically runs in **Guest Mode** via LocalStorage, with the built-in AI teacher and curriculum ready to use immediately).*
+*(If you don't add any environment variables, JavaBuddy operates automatically in **Guest Mode** via LocalStorage, with the built-in offline kindergarten tutor and interactive lessons ready to use immediately).*
 
 ---
 
 ### Step 5: Deploy
 Click **Deploy**.
-Vercel will build your project in ~30 seconds and provide you with a live URL (e.g., `https://javabuddy.vercel.app`).
+Vercel will build your project and provide you with a live URL (e.g., `https://javabuddy.vercel.app`).
 
-> **Why React Router SPA Works on Vercel**:
-> We created [client/vercel.json](file:///c:/Users/USER/OneDrive/Desktop/Java/client/vercel.json) with `rewrites: [{"source": "/(.*)", "destination": "/index.html"}]`. This ensures refreshing on routes like `/learn`, `/playground`, or `/lesson/level-1-first-program` will never produce a 404 error on Vercel!
+> **How All-in-One Vercel Routing Works**:
+> - `/api/*` requests (like `/api/execute`, `/api/tutor`, `/api/health`) route directly to the Vercel Serverless Function ([api/index.ts](file:///c:/Users/USER/OneDrive/Desktop/Java/api/index.ts)).
+> - All other routes route to `index.html` via React Router SPA rewrites.
+> - Because both frontend and backend share the same domain and SSL certificate, there are zero CORS issues and zero Mixed Content errors!
 
 ---
 
-## Part 3: Deploy the Backend API (Optional for Cloud Execution)
-
-Vercel hosts the React frontend. To host the Node.js/Express backend (`server/`):
-
-1. **Recommended Free Host**: [Render.com](https://render.com) or [Railway.app](https://railway.app).
-2. Connect your GitHub repository.
-3. Configure the Web Service:
-   - **Root Directory**: `server`
-   - **Build Command**: `npm install && npm run build`
-   - **Start Command**: `node dist/server.js`
-4. Set Environment Variables:
-   - `PORT`: `10000` (or host assigned)
-   - `CLIENT_URL`: `https://your-javabuddy-frontend.vercel.app`
-   - `JAVA_EXECUTION_PROVIDER`: `judge0_rapidapi` (or `unconfigured`)
-   - `RAPIDAPI_KEY`: *(your RapidAPI key if enabling live cloud execution)*
-5. Copy the live Render backend URL (e.g. `https://javabuddy-api.onrender.com`) and paste it as `VITE_API_URL` in your Vercel project settings.
+### Alternative: Standalone Backend on Render or Railway
+If you prefer running the Express backend as a dedicated long-running service rather than serverless functions:
+1. Connect your GitHub repository to [Render.com](https://render.com).
+2. Set **Root Directory** to `server`.
+3. Add `VITE_API_URL = https://your-backend.onrender.com` in your Vercel project environment variables.
