@@ -83,6 +83,18 @@ export async function executeJavaCode(sourceCode: string, stdin: string = ''): P
 
     if (!res.ok) {
       const errorData = await res.json().catch(() => ({}));
+      if (res.status === 405 || res.status === 404) {
+        return {
+          status: 'Unconfigured',
+          stdout: '',
+          stderr: 'Java Execution Service is currently operating in offline mode on this cloud deployment.\n\nTo enable live execution, set RAPIDAPI_KEY and JAVA_EXECUTION_PROVIDER=judge0_rapidapi in your Vercel Environment Variables, or run the local backend server with npm.cmd run dev:server.',
+          compileOutput: '',
+          time: null,
+          memory: null,
+          provider: 'Cloud Sandbox (Offline)',
+          beginnerExplanation: 'The cloud code runner is resting! The Monaco editor, lesson examples, and kindergarten tutor are ready for you.',
+        };
+      }
       return {
         status: 'Error',
         stdout: '',
