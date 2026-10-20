@@ -1,0 +1,103 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Quicksand:wght@500;600;700&display=swap');
+
+:root {
+  --bg-main: #fcfbfe;
+  --card-bg: #ffffff;
+  --border-subtle: #f1edfa;
+  --text-primary: #2d264b;
+  --text-secondary: #6e6787;
+}
+
+.dark {
+  --bg-main: #0f0d19;
+  --card-bg: #1a1728;
+  --border-subtle: #2b2542;
+  --text-primary: #f3f0fc;
+  --text-secondary: #a39cb8;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Quicksand', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Custom scrollbars for clean code and log reading */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Playful 3D Button Shadows (Tactile Kindergarten Feel) */
+.btn-bubble {
+  transition: all 0.15s ease-in-out;
+  transform: translateY(0);
+}
+
+.btn-bubble:hover {
+  transform: translateY(-2px);
+}
+
+.btn-bubble:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Floating animation for JavaBuddy Mascot */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(1.5deg);
+  }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes pulse-gentle {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.02);
+  }
+}
+
+.animate-pulse-gentle {
+  animation: pulse-gentle 2.5s ease-in-out infinite;
+}
